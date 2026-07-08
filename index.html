@@ -99,7 +99,10 @@
             <li>Вітрильна яхта 50′, до 8 гостей</li>
             <li>Санторіні → Іос → Парос → Наксос → Міконос</li>
           </ul>
-          <div class="voyage__foot"><span class="voyage__price">від €2 900<i>/ особу</i></span><a href="#contact" class="voyage__link">Дізнатися більше →</a></div>
+          <div class="voyage__foot">
+            <div class="voyage__prices"><span class="voyage__price">від €2 900<i>/ особу</i></span><span class="voyage__deposit">передоплата 12 000 ₴</span></div>
+            <button class="voyage__pay" data-tour="cyclades" data-name="Кіклади, Греція">Забронювати →</button>
+          </div>
         </div>
       </article>
 
@@ -115,7 +118,10 @@
             <li>Моторна яхта 60′, до 8 гостей</li>
             <li>Салерно → Амальфі → Позітано → Капрі → Іск'я</li>
           </ul>
-          <div class="voyage__foot"><span class="voyage__price">від €3 600<i>/ особу</i></span><a href="#contact" class="voyage__link">Дізнатися більше →</a></div>
+          <div class="voyage__foot">
+            <div class="voyage__prices"><span class="voyage__price">від €3 600<i>/ особу</i></span><span class="voyage__deposit">передоплата 15 000 ₴</span></div>
+            <button class="voyage__pay" data-tour="amalfi" data-name="Амальфі та Капрі, Італія">Забронювати →</button>
+          </div>
         </div>
       </article>
 
@@ -131,7 +137,10 @@
             <li>Вітрильна яхта 55′, до 8 гостей</li>
             <li>Ніцца → Сен-Тропе → Пор-Кро → Кальві → Боніфачо</li>
           </ul>
-          <div class="voyage__foot"><span class="voyage__price">від €4 200<i>/ особу</i></span><a href="#contact" class="voyage__link">Дізнатися більше →</a></div>
+          <div class="voyage__foot">
+            <div class="voyage__prices"><span class="voyage__price">від €4 200<i>/ особу</i></span><span class="voyage__deposit">передоплата 18 000 ₴</span></div>
+            <button class="voyage__pay" data-tour="riviera" data-name="Лазурний берег і Корсика">Забронювати →</button>
+          </div>
         </div>
       </article>
 
@@ -147,7 +156,10 @@
             <li>Катамаран 52′, до 10 гостей</li>
             <li>Дубровник → Млет → Корчула → Хвар → Спліт</li>
           </ul>
-          <div class="voyage__foot"><span class="voyage__price">від €2 600<i>/ особу</i></span><a href="#contact" class="voyage__link">Дізнатися більше →</a></div>
+          <div class="voyage__foot">
+            <div class="voyage__prices"><span class="voyage__price">від €2 600<i>/ особу</i></span><span class="voyage__deposit">передоплата 11 000 ₴</span></div>
+            <button class="voyage__pay" data-tour="adriatic" data-name="Адріатика, Хорватія">Забронювати →</button>
+          </div>
         </div>
       </article>
 
@@ -163,7 +175,10 @@
             <li>Катамаран 58′, до 8 гостей</li>
             <li>Тортола → Норман → Вірджин-Горда → Анегада → Джост</li>
           </ul>
-          <div class="voyage__foot"><span class="voyage__price">від €5 400<i>/ особу</i></span><a href="#contact" class="voyage__link">Дізнатися більше →</a></div>
+          <div class="voyage__foot">
+            <div class="voyage__prices"><span class="voyage__price">від €5 400<i>/ особу</i></span><span class="voyage__deposit">передоплата 22 000 ₴</span></div>
+            <button class="voyage__pay" data-tour="bvi" data-name="Британські Віргінські острови">Забронювати →</button>
+          </div>
         </div>
       </article>
 
@@ -179,7 +194,10 @@
             <li>Гулет (традиційна яхта) 24 м, до 12 гостей</li>
             <li>Бодрум → Датча → Гьоджек → Кекова → Фетхіє</li>
           </ul>
-          <div class="voyage__foot"><span class="voyage__price">від €1 900<i>/ особу</i></span><a href="#contact" class="voyage__link">Дізнатися більше →</a></div>
+          <div class="voyage__foot">
+            <div class="voyage__prices"><span class="voyage__price">від €1 900<i>/ особу</i></span><span class="voyage__deposit">передоплата 9 000 ₴</span></div>
+            <button class="voyage__pay" data-tour="turkey" data-name="Блакитний круїз, Туреччина">Забронювати →</button>
+          </div>
         </div>
       </article>
 
@@ -308,6 +326,18 @@
     </div>
   </footer>
 
+  <!-- ░░ PAYMENT MODAL ░░ -->
+  <div class="modal" id="payModal" aria-hidden="true">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal__close" data-close aria-label="Закрити">×</button>
+      <p class="kicker">Serenity Yachting Club</p>
+      <h3 class="modal__title" id="modalTitle">Бронювання</h3>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

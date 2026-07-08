@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Статус оплати — Serenity Yachting Club</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2314202e'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' fill='%23c2a878' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .status{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy);color:var(--ivory);padding:2rem;text-align:center}
+    .status__box{max-width:520px}
+    .status__icon{font-size:3rem;margin-bottom:1rem}
+    .status h1{font-family:var(--serif);font-weight:500;font-size:clamp(2rem,5vw,3rem);margin-bottom:1rem}
+    .status p{color:rgba(246,241,231,.8);font-size:1.08rem;margin-bottom:.8rem}
+    .status .btn{margin-top:1.8rem}
+    .status__spinner{width:38px;height:38px;border:2px solid var(--line-light);border-top-color:var(--brass-2);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1.6rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <section class="status">
+    <div class="status__box" id="box">
+      <div class="status__spinner"></div>
+      <h1>Перевіряємо оплату…</h1>
+      <p>Хвилинку, звіряємося з monobank.</p>
+    </div>
+  </section>
+
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      var box = document.getElementById('box');
+      var api = ((window.SERENITY_CONFIG || {}).paymentApi || '').replace(/\/+$/, '');
+      var params = new URLSearchParams(location.search);
+      var invoiceId = params.get('invoiceId') || params.get('invoice');
+
+      function render(icon, title, text) {
+        box.innerHTML =
+          '<div class="status__icon">' + icon + '</div>' +
+          '<h1>' + title + '</h1>' +
+          '<p>' + text + '</p>' +
+          '<a href="index.html" class="btn btn--gold">На головну</a>';
+      }
+
+      if (!api || !invoiceId) {
+        render('⚓', 'Дякуємо!',
+          'Якщо оплата пройшла успішно, ми звʼяжемося з вами найближчим часом, ' +
+          'щоб узгодити деталі подорожі.');
+        return;
+      }
+
+      fetch(api + '/status?invoiceId=' + encodeURIComponent(invoiceId))
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var s = d && d.status;
+          if (s === 'success' || s === 'hold') {
+            render('🥂', 'Оплату отримано!',
+              'Дякуємо за бронювання. Наш консьєрж звʼяжеться з вами протягом робочого дня, ' +
+              'щоб узгодити дати, каюту та деталі маршруту.');
+          } else if (s === 'processing' || s === 'created') {
+            render('⏳', 'Оплата обробляється',
+              'Платіж ще в дорозі. Щойно він підтвердиться, ми напишемо вам. ' +
+              'Можете оновити сторінку за хвилину.');
+          } else if (s === 'failure' || s === 'expired' || s === 'reversed') {
+            render('⚠️', 'Оплату не завершено',
+              'Схоже, платіж не пройшов. Спробуйте ще раз або залиште запит на сайті — ' +
+              'ми оформимо бронювання вручну.');
+          } else {
+            render('⚓', 'Дякуємо!',
+              'Ми отримали ваш запит. Якщо оплата пройшла, ми скоро з вами звʼяжемося.');
+          }
+        })
+        .catch(function () {
+          render('⚓', 'Дякуємо!',
+            'Ми отримали ваш запит. Якщо оплата пройшла, ми скоро з вами звʼяжемося.');
+        });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+name = "serenity-pay"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Публічні змінні (не секрети). Відредагуйте під свій сайт і Worker.
+[vars]
+SITE_URL = "https://volodymyr-babak.github.io/serenity-yachting-club"
+ALLOWED_ORIGIN = "https://volodymyr-babak.github.io"
+# SELF_URL заповніть після першого деплою — це адреса самого Worker,
+# напр. "https://serenity-pay.ВАШ-САБДОМЕН.workers.dev"
+SELF_URL = ""
+
+# MONOBANK_TOKEN НЕ вписуйте сюди. Додайте його як секрет:
+#   npx wrangler secret put MONOBANK_TOKEN

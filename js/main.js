@@ -74,4 +74,77 @@
       form.classList.add('sent');
     });
   }
+
+  /* ── payment (monobank via Cloudflare Worker) ── */
+  var cfg = window.SERENITY_CONFIG || {};
+  var modal = document.getElementById('payModal');
+  var modalTitle = document.getElementById('modalTitle');
+  var modalBody = document.getElementById('modalBody');
+
+  function openModal(title, html) {
+    modalTitle.textContent = title;
+    modalBody.innerHTML = html;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  if (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target.hasAttribute('data-close')) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
+  }
+
+  function startPayment(btn) {
+    var tour = btn.getAttribute('data-tour');
+    var name = btn.getAttribute('data-name') || 'подорож';
+    var api = (cfg.paymentApi || '').replace(/\/+$/, '');
+
+    // Онлайн-оплата ще не налаштована — акуратно пояснюємо і ведемо до форми.
+    if (!api) {
+      openModal('Онлайн-оплата готується', [
+        '<p>Прямо зараз бронювання туру <strong>«' + name + '»</strong> ми оформлюємо ',
+        'персонально: залиште запит — і ми надішлемо посилання на оплату передоплати ',
+        'через monobank та підтвердимо дати.</p>',
+        '<a href="#contact" class="btn btn--gold" data-close>Залишити запит</a>'
+      ].join(''));
+      return;
+    }
+
+    btn.disabled = true;
+    openModal('Готуємо оплату…',
+      '<div class="modal__spinner"></div><p>Створюємо захищений рахунок monobank для туру ' +
+      '<strong>«' + name + '»</strong>. Зачекайте секунду.</p>');
+
+    fetch(api + '/invoice', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tourId: tour })
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, data: j }; }); })
+      .then(function (res) {
+        if (res.ok && res.data && res.data.pageUrl) {
+          window.location.href = res.data.pageUrl; // → сторінка оплати monobank
+        } else {
+          throw new Error((res.data && res.data.error) || 'Не вдалося створити рахунок');
+        }
+      })
+      .catch(function (err) {
+        openModal('Щось пішло не так', [
+          '<p>' + (err.message || 'Помилка звʼязку з платіжним сервісом') + '.</p>',
+          '<p>Спробуйте ще раз або залиште запит — ми оформимо бронювання вручну.</p>',
+          '<a href="#contact" class="btn btn--dark" data-close>Залишити запит</a>'
+        ].join(''));
+      })
+      .then(function () { btn.disabled = false; });
+  }
+
+  document.querySelectorAll('.voyage__pay').forEach(function (btn) {
+    btn.addEventListener('click', function () { startPayment(btn); });
+  });
 })();

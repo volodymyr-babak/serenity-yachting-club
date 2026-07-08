@@ -1,0 +1,13 @@
+{
+  "name": "serenity-pay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker для оплати турів Serenity Yachting Club через monobank",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}
